@@ -13,7 +13,7 @@ class StaveSurvey:
         # finding the relative data
         self.relative_data = self.virtual_data - self.survey_data
 
-        # separating data out to sort by moduels
+        # separating data out to sort by modules
         self.separate_module = np.split(self.relative_data, self.relative_data.shape[0] // 4)
 
         # reading the first line of the survey_data if there is a fidcucial mark
@@ -30,6 +30,7 @@ class StaveSurvey:
         dim = ['X', 'Y']
         bins = np.arange(-30, 35, 7.5)
 
+        # create separate histograms for the x and y
         for i in range(2):
             fig = plt.figure("Histogram - " + dim[i], (10, 10))
             ax = fig.add_subplot(111)
@@ -45,6 +46,7 @@ class StaveSurvey:
             ax.annotate('$\sigma$ = ' + str(round(self.relative_data[:, i].std(), 2)) + ' $\mu$m', xy=(0.995, 0.925),
                         xycoords='axes fraction', fontsize=16, horizontalalignment='right', verticalalignment='bottom')
 
+            # now save the pdfs into the specified folder
             if not os.path.isdir(save_folder):
                 os.makedirs(save_folder)
             plt.savefig(save_folder + '/' + dim[i] + '-Corners' + 'ABCD' + '-histogram' + '.pdf')
@@ -77,8 +79,8 @@ class StaveSurvey:
         Separates each module into a list containing dictionaries of relative corner data
 
         :return: A list of dictionaries in the order of the modules are placed in
-        dictionary keys: dictionary keys: 'A', 'B', 'C', 'D', for each corner
-        dictionary items: list of relative differences for the module corner -> [dx, dy]
+        dictionary keys: 'A', 'B', 'C', 'D', for each corner
+        dictionary items: list of relative differences for the module corner -> [dx, dy] with type float
         """
         corners = enumerate('ABCD')
         modules = []
@@ -86,7 +88,7 @@ class StaveSurvey:
         for modules in self.separate_module:
             diffs = {}
             for n_corner, corner in corners:
-                diffs[corner] = modules[n_corner, :]
+                diffs[corner] = round(modules[n_corner, :], 1)
             modules.append(diffs)
 
         return modules
