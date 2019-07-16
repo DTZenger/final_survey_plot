@@ -80,20 +80,31 @@ class StaveSurvey:
 
         :return: A list of dictionaries in the order of the modules are placed in
         dictionary keys: 'A', 'B', 'C', 'D', for each corner
-        dictionary items: list of relative differences for the module corner -> [dx, dy] with type float
+        dictionary items: list of relative differences for the module corner -> [dx, dy] with type float in unit um
         """
-        corners = enumerate('ABCD')
-        modules = []
+        corners = 'ABCD'
+        modules_nums = []
 
-        for modules in self.separate_module:
+        for m in self.separate_module:
             diffs = {}
-            for n_corner, corner in corners:
-                diffs[corner] = round(modules[n_corner, :], 1)
-            modules.append(diffs)
+            for n_corner, corner in enumerate(corners):
+                diffs[corner] = np.round(m[n_corner, :]*1000, decimals=1)
+            modules_nums.append(diffs)
 
-        return modules
+        return modules_nums
 
 
 if __name__ == '__main__':
-    ss = StaveSurvey('testfile1.csv', 'testfile2.csv')
-    ss.plot_histogram('~/final_survey')
+    ss = StaveSurvey('virtual_stave8.csv', 'final_survey_stave8.csv')
+#    ss.plot_histogram('final_survey')
+
+#    print(ss.separate_module)
+
+    passed_modules, total_failed = ss.find_if_passing(tolerance=0.025)
+#    print(passed_modules)
+#    print(total_failed)
+
+    modules = ss.separate_corners()
+    for i in modules:
+        print(i)
+
