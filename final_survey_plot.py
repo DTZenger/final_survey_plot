@@ -68,7 +68,7 @@ class StaveSurvey:
         passed_modules = []
 
         for module in self.separate_module:
-            passed_modules.append(np.less(module, tolerance).all(axis=0))
+            passed_modules.append(np.less(np.absolute(module), tolerance).all(axis=0))
             # so if any dx or dy fails, (i.e. a False shows up for the module in a column),
             # the respective column is False for the module
 
