@@ -82,12 +82,12 @@ class StaveSurvey:
         dictionary keys: 'A', 'B', 'C', 'D', for each corner
         dictionary items: list of relative differences for the module corner -> [dx, dy] with type float in unit um
         """
-        corners = 'ABCD'
+        corners = list(enumerate('ABCD'))
         modules_nums = []
 
         for m in self.separate_module:
             diffs = {}
-            for n_corner, corner in enumerate(corners):
+            for n_corner, corner in corners:
                 diffs[corner] = np.round(m[n_corner, :]*1000, decimals=1)
             modules_nums.append(diffs)
 
@@ -99,7 +99,7 @@ if __name__ == '__main__':
 #    ss.plot_histogram('final_survey')
 
 #    print(ss.separate_module)
-
+    """
     passed_modules, total_failed = ss.find_if_passing(tolerance=0.025)
 #    print(passed_modules)
 #    print(total_failed)
@@ -107,4 +107,9 @@ if __name__ == '__main__':
     modules = ss.separate_corners()
     for i in modules:
         print(i)
+    """
 
+    ss1 = StaveSurvey('Stave8Ideals.csv', 'Stave8Survey.csv')
+
+    for i in range(len(ss.separate_module)):
+        print(np.equal(ss.separate_module[i], ss1.separate_module[i]).all())
