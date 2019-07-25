@@ -82,7 +82,7 @@ class Module:
 
 
 def get_module_number(module_file):
-    return int(re.search('\d+', module_file).group(0))
+    return int(re.search(r'\d+', module_file).group(0))
 
 
 if __name__ == '__main__':
@@ -91,7 +91,7 @@ if __name__ == '__main__':
     measurement_values = []
     module_files = glob.glob('./modules/Module*.txt')
     module_files.sort(key=get_module_number)
-#    print(module_files)
+    print(module_files)
 
     for file in module_files:
         m = Module(file)
