@@ -28,9 +28,8 @@ class Module:
     def __init__(self, module_file):
         self.dimensions = ['X', 'Y']
 
-        infile = open(module_file, "r")
-        self.lines = infile.readlines()
-        infile.close()
+        with open(module_file) as f_in:
+            self.lines = list(filter(None, (line.rstrip() for line in f_in)))
 
         indA, indB, indC, indD = 0, 0, 0, 0
         for ind, line in enumerate(self.lines):
@@ -44,9 +43,9 @@ class Module:
                 indD = ind + 1
 
         self.corners = collections.OrderedDict()
-        self.corners['A'] = self.lines[indA: indB - 2]
-        self.corners['B'] = self.lines[indB: indC - 2]
-        self.corners['C'] = self.lines[indC: indD - 2]
+        self.corners['A'] = self.lines[indA: indB - 1]
+        self.corners['B'] = self.lines[indB: indC - 1]
+        self.corners['C'] = self.lines[indC: indD - 1]
         self.corners['D'] = self.lines[indD:]
 
         self.stages = []
@@ -104,5 +103,5 @@ if __name__ == '__main__':
     data_ideals = np.vstack(ideal_values)
     data_measurements = np.vstack(measurement_values)
 
-    np.savetxt('Stave8Ideals.csv', data_ideals, fmt='%.6f', delimiter=',')
-    np.savetxt('Stave8Survey.csv', data_measurements, fmt='%.6f', delimiter=',')
+    np.savetxt('Stave8IdealsTest.csv', data_ideals, fmt='%.6f', delimiter=',')
+    np.savetxt('Stave8SurveyTest.csv', data_measurements, fmt='%.6f', delimiter=',')
